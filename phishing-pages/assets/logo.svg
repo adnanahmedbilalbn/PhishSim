@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 56" fill="none">
+  <path d="M8 4 L8 52 L18 52 L18 32 L28 52 L40 52 L26 30 L38 8 L26 8 L18 24 L18 8 Z" fill="#f7941d"/>
+  <path d="M44 8 L44 52 L54 52 L54 8 Z" fill="#f7941d"/>
+  <path d="M58 8 L58 52 L68 52 L68 8 Z" fill="#f7941d"/>
+  <path d="M72 8 L72 52 L82 52 L82 8 Z" fill="#f7941d"/>
+  <path d="M0 28 C0 12 12 0 28 0 C44 0 56 12 56 28 C56 44 44 56 28 56" fill="none"/>
+  <g transform="translate(88, 6)">
+    <path d="M0 44 L12 0 L22 0 L10 44 Z M14 44 L26 0 L36 0 L24 44 Z" fill="#1565a8"/>
+    <path d="M40 0 L40 44 L50 44 L50 28 L62 44 L74 44 L58 26 L72 0 L60 0 L50 16 L50 0 Z" fill="#1565a8"/>
+    <text x="78" y="18" font-family="Poppins, Arial, sans-serif" font-size="11" font-weight="600" fill="#1565a8">LEARNING MANAGEMENT</text>
+    <text x="78" y="34" font-family="Poppins, Arial, sans-serif" font-size="11" font-weight="600" fill="#1565a8">SYSTEM</text>
+  </g>
+  <g transform="translate(2, 2)">
+    <path d="M20 4 L36 20 L28 28 L12 12 Z" fill="#1565a8"/>
+    <path d="M36 20 L52 36 L44 44 L28 28 Z" fill="#f7941d"/>
+    <circle cx="48" cy="8" r="5" fill="#f7941d"/>
+  </g>
+</svg>

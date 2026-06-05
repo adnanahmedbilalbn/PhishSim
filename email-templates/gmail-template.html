@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background:#f5f5f5;font-family:Roboto,Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f5;padding:20px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+          <tr>
+            <td style="padding:24px 32px;border-bottom:1px solid #e8eaed;">
+              <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='74' height='24' viewBox='0 0 75 24'%3E%3Cpath fill='%234285F4' d='M9.24 8.19v2.46h5.88c-.18 1.38-.64 2.39-1.34 3.1-.86.86-2.2 1.8-4.54 1.8-3.62 0-6.45-2.92-6.45-6.54s2.83-6.54 6.45-6.54c1.95 0 3.38.77 4.43 1.76L15.4 2.5C13.94 1.08 11.98 0 9.24 0 4.28 0 .11 4.04.11 9s4.17 9 9.13 9c2.68 0 4.7-.88 6.28-2.52 1.62-1.62 2.14-3.9 2.14-5.67 0-.57-.04-1.1-.13-1.6H9.24z'/%3E%3C/svg%3E" alt="Google" width="74" height="24">
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:32px;">
+              <h1 style="margin:0 0 16px;font-size:22px;font-weight:400;color:#202124;">Security Alert: Unusual sign-in attempt</h1>
+              <p style="margin:0 0 16px;font-size:14px;color:#5f6368;line-height:1.6;">
+                Hi {{FIRST_NAME}},
+              </p>
+              <p style="margin:0 0 16px;font-size:14px;color:#5f6368;line-height:1.6;">
+                We detected an unusual sign-in attempt on your Google Account (<strong>{{TARGET_EMAIL}}</strong>) from an unrecognized device in <strong>Frankfurt, Germany</strong> at 3:42 AM.
+              </p>
+              <p style="margin:0 0 16px;font-size:14px;color:#5f6368;line-height:1.6;">
+                If this was you, no further action is needed. If you don't recognize this activity, please verify your account immediately to prevent unauthorized access.
+              </p>
+              <table cellpadding="0" cellspacing="0" style="margin:24px 0;">
+                <tr>
+                  <td style="background:#1a73e8;border-radius:4px;">
+                    <a href="{{PHISHING_LINK}}" style="display:inline-block;padding:12px 32px;color:#ffffff;text-decoration:none;font-size:14px;font-weight:500;">Secure My Account</a>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:0 0 8px;font-size:13px;color:#80868b;line-height:1.5;">
+                This alert was sent to {{TARGET_EMAIL}} because unusual activity was detected on your account. If you did not request this, please ignore this email.
+              </p>
+              <p style="margin:16px 0 0;font-size:12px;color:#80868b;">
+                Google Security Team
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <img src="{{TRACKING_PIXEL_URL}}" width="1" height="1" alt="" style="display:block;">
+</body>
+</html>

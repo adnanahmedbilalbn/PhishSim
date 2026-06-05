@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in - Google Accounts</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Google Sans', Roboto, Arial, sans-serif;
+      background: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .sim-banner {
+      background: #fce8e6;
+      color: #c5221f;
+      text-align: center;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      border-bottom: 1px solid #f5c6c2;
+    }
+    .container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      padding: 48px 40px 36px;
+      width: 100%;
+      max-width: 450px;
+      min-height: 500px;
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .logo svg { width: 75px; height: 24px; }
+    h1 {
+      font-size: 24px;
+      font-weight: 400;
+      color: #202124;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #5f6368;
+      font-size: 16px;
+      margin-bottom: 32px;
+    }
+    .step { display: none; }
+    .step.active { display: block; }
+    .input-group { margin-bottom: 24px; }
+    label {
+      display: block;
+      font-size: 14px;
+      color: #5f6368;
+      margin-bottom: 8px;
+    }
+    input[type="email"], input[type="password"], input[type="text"] {
+      width: 100%;
+      padding: 13px 15px;
+      border: 1px solid #dadce0;
+      border-radius: 4px;
+      font-size: 16px;
+      outline: none;
+      transition: border 0.2s;
+    }
+    input:focus { border: 2px solid #1a73e8; padding: 12px 14px; }
+    .email-display {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid #dadce0;
+      border-radius: 24px;
+      width: fit-content;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #3c4043;
+      cursor: pointer;
+    }
+    .email-display svg { width: 18px; height: 18px; fill: #5f6368; }
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 32px;
+    }
+    .link {
+      color: #1a73e8;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .link:hover { text-decoration: underline; }
+    .btn-next {
+      background: #1a73e8;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      min-width: 80px;
+    }
+    .btn-next:hover { background: #1765cc; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+    .btn-next:disabled { background: #dadce0; cursor: not-allowed; }
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      margin-top: 48px;
+      font-size: 12px;
+      color: #5f6368;
+    }
+    .footer-links a { color: #5f6368; text-decoration: none; }
+    .footer-links a:hover { text-decoration: underline; }
+    .lang-select {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 12px;
+      color: #5f6368;
+    }
+    .error { color: #d93025; font-size: 12px; margin-top: 4px; display: none; }
+    .preview-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    .preview-overlay.active { display: flex; }
+    .preview-msg {
+      background: #fff;
+      padding: 24px 32px;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #5f6368;
+    }
+  </style>
+</head>
+<body>
+  <div class="sim-banner">⚠️ SIMULATION — This is a cybersecurity training exercise</div>
+
+  <div class="container">
+    <div class="card">
+      <div class="logo">
+        <svg viewBox="0 0 75 24" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#4285F4" d="M9.24 8.19v2.46h5.88c-.18 1.38-.64 2.39-1.34 3.1-.86.86-2.2 1.8-4.54 1.8-3.62 0-6.45-2.92-6.45-6.54s2.83-6.54 6.45-6.54c1.95 0 3.38.77 4.43 1.76L15.4 2.5C13.94 1.08 11.98 0 9.24 0 4.28 0 .11 4.04.11 9s4.17 9 9.13 9c2.68 0 4.7-.88 6.28-2.52 1.62-1.62 2.14-3.9 2.14-5.67 0-.57-.04-1.1-.13-1.6H9.24z"/>
+          <path fill="#EA4335" d="M25 6.19c-3.21 0-5.83 2.44-5.83 5.81 0 3.37 2.62 5.81 5.83 5.81s5.83-2.44 5.83-5.81c0-3.37-2.62-5.81-5.83-5.81zm0 9.33c-1.76 0-3.28-1.46-3.28-3.52 0-2.06 1.52-3.52 3.28-3.52s3.28 1.46 3.28 3.52c0 2.06-1.52 3.52-3.28 3.52z"/>
+          <path fill="#FBBC05" d="M53.58 7.49c-.72 0-1.27.59-1.27 1.31 0 .72.55 1.31 1.27 1.31.72 0 1.27-.59 1.27-1.31 0-.72-.55-1.31-1.27-1.31z"/>
+          <path fill="#4285F4" d="M43.29 6.19c-3.21 0-5.83 2.44-5.83 5.81 0 3.37 2.62 5.81 5.83 5.81s5.83-2.44 5.83-5.81c0-3.37-2.62-5.81-5.83-5.81zm0 9.33c-1.76 0-3.28-1.46-3.28-3.52 0-2.06 1.52-3.52 3.28-3.52s3.28 1.46 3.28 3.52c0 2.06-1.52 3.52-3.28 3.52z"/>
+          <path fill="#34A853" d="M68.13 8.16c0 1.42-.45 2.55-1.07 3.28-.86 1.02-2.2 1.68-3.75 1.68-2.98 0-5.4-2.42-5.4-5.4s2.42-5.4 5.4-5.4c1.43 0 2.45.56 3.24 1.32l-1.32 1.32c-.45-.42-1.07-.74-1.92-.74-1.64 0-2.96 1.34-2.96 2.96s1.32 2.96 2.96 2.96c1.07 0 1.68-.43 2.07-1.03.32-.45.53-1.1.53-1.98H68.13v-.97z"/>
+          <path fill="#EA4335" d="M58.16 4.74V1.26h-1.89v3.48h-1.84v1.57h1.84v8.04h1.89V9.81h1.84V8.24H58.16z"/>
+        </svg>
+      </div>
+
+      <form id="loginForm">
+        <input type="hidden" name="campaign_id" id="campaign_id" value="CAMPAIGN_ID_PLACEHOLDER">
+        <input type="hidden" name="target_id" id="target_id" value="TARGET_ID_PLACEHOLDER">
+
+        <div class="step active" id="step1">
+          <h1>Sign in</h1>
+          <p class="subtitle">Use your Google Account</p>
+          <div class="input-group">
+            <input type="email" id="email" name="email" placeholder="Email or phone" autocomplete="username" required>
+            <div class="error" id="emailError">Enter a valid email</div>
+          </div>
+          <div class="actions">
+            <a class="link">Forgot email?</a>
+            <button type="button" class="btn-next" id="btnNext1">Next</button>
+          </div>
+        </div>
+
+        <div class="step" id="step2">
+          <h1>Welcome</h1>
+          <div class="email-display" id="emailDisplay">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <span id="emailShown"></span>
+          </div>
+          <div class="input-group">
+            <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password">
+          </div>
+          <div class="actions">
+            <a class="link">Forgot password?</a>
+            <button type="submit" class="btn-next" id="btnSubmit">Next</button>
+          </div>
+        </div>
+      </form>
+
+      <div class="footer-links" style="margin-top: 48px;">
+        <a href="#">Create account</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="lang-select">English (United States)</div>
+
+  <div class="preview-overlay" id="previewOverlay">
+    <div class="preview-msg">Preview mode — form submission disabled</div>
+  </div>
+
+  <img id="trackingPixel" src="" width="1" height="1" style="position:absolute;opacity:0;" alt="">
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const isPreview = params.get('preview') === 'true';
+    const targetId = params.get('target_id') || 'TARGET_ID_PLACEHOLDER';
+    const campaignId = params.get('campaign_id') || 'CAMPAIGN_ID_PLACEHOLDER';
+
+    document.getElementById('target_id').value = targetId;
+    document.getElementById('campaign_id').value = campaignId;
+    document.getElementById('trackingPixel').src =
+      `http://localhost:4000/track/pixel/${targetId}/${campaignId}`;
+
+    if (isPreview) {
+      document.getElementById('previewOverlay').classList.add('active');
+      document.querySelectorAll('input, button').forEach(el => el.disabled = true);
+    }
+
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const emailInput = document.getElementById('email');
+
+    document.getElementById('btnNext1').addEventListener('click', () => {
+      if (!emailInput.value || !emailInput.value.includes('@')) {
+        document.getElementById('emailError').style.display = 'block';
+        return;
+      }
+      document.getElementById('emailError').style.display = 'none';
+      document.getElementById('emailShown').textContent = emailInput.value;
+      step1.classList.remove('active');
+      step2.classList.add('active');
+      document.getElementById('password').focus();
+    });
+
+    document.getElementById('emailDisplay').addEventListener('click', () => {
+      step2.classList.remove('active');
+      step1.classList.add('active');
+      emailInput.focus();
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (isPreview) return;
+
+      const email = emailInput.value;
+      try {
+        const res = await fetch('http://localhost:4000/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, campaign_id: campaignId, target_id: targetId }),
+        });
+        const data = await res.json();
+        window.location.href = data.redirect || 'https://mail.google.com';
+      } catch (err) {
+        window.location.href = 'https://mail.google.com';
+      }
+    });
+  </script>
+</body>
+</html>

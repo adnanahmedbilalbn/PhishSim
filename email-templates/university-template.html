@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background:#e8eef3;font-family:'Segoe UI',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#e8eef3;padding:20px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:4px;overflow:hidden;border-top:4px solid #1e3a5f;">
+          <tr>
+            <td style="padding:24px 32px;background:#1e3a5f;">
+              <span style="color:#ffffff;font-size:18px;font-weight:600;">State University — IT Services</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:32px;">
+              <h1 style="margin:0 0 16px;font-size:20px;color:#1e3a5f;">Action Required: Portal Access Expiring</h1>
+              <p style="margin:0 0 16px;font-size:14px;color:#4a5568;line-height:1.6;">
+                Dear {{FIRST_NAME}},
+              </p>
+              <p style="margin:0 0 16px;font-size:14px;color:#4a5568;line-height:1.6;">
+                This is an important notice regarding your Student Portal account (<strong>{{TARGET_EMAIL}}</strong>). Due to an upcoming system migration, all student portal credentials must be re-verified within the next <strong>24 hours</strong>.
+              </p>
+              <p style="margin:0 0 16px;font-size:14px;color:#4a5568;line-height:1.6;">
+                Failure to verify your account before the deadline will result in temporary suspension of portal access, including course registration, grade viewing, and library resources.
+              </p>
+              <table cellpadding="0" cellspacing="0" style="margin:24px 0;">
+                <tr>
+                  <td style="background:#1e3a5f;border-radius:4px;">
+                    <a href="{{PHISHING_LINK}}" style="display:inline-block;padding:12px 32px;color:#ffffff;text-decoration:none;font-size:14px;font-weight:600;">Verify My Account</a>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:0;font-size:13px;color:#718096;line-height:1.5;">
+                If you have already verified your account, please disregard this message. For assistance, contact the IT Help Desk at helpdesk@university.edu.
+              </p>
+              <p style="margin:16px 0 0;font-size:12px;color:#a0aec0;">
+                IT Support — University
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <img src="{{TRACKING_PIXEL_URL}}" width="1" height="1" alt="" style="display:block;">
+</body>
+</html>
