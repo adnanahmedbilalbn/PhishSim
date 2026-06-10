@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Download, ArrowLeft } from 'lucide-react';
 import { apiFetch } from '../utils/api';
+import EmailPreviewLink from '../components/EmailPreviewLink';
 
 const PSYCHOLOGY = {
   gmail: {
@@ -168,6 +169,7 @@ function SingleCampaignResults({ campaignId }) {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-gray-500 border-b border-border">
+                <th className="text-left py-2 px-2 w-28">Preview</th>
                 <th className="text-left py-2 px-2">Recipient Email</th>
                 <th className="text-left py-2 px-2">Student ID</th>
                 <th className="text-left py-2 px-2">Email / Username</th>
@@ -183,7 +185,10 @@ function SingleCampaignResults({ campaignId }) {
             <tbody>
               {targets.map((t) => (
                 <tr key={t.id} className={`border-b border-border/50 ${rowColor(t)}`}>
-                  <td className="py-2 px-2 font-mono text-xs">{t.email}</td>
+                  <td className="py-2 px-2">
+                    <EmailPreviewLink url={t.preview_url} />
+                  </td>
+                  <td className="py-2 px-2 font-mono text-xs text-gray-300">{t.email}</td>
                   <td className="py-2 px-2 font-mono text-xs text-warning">{t.submitted_student_id || '—'}</td>
                   <td className="py-2 px-2 font-mono text-xs">{t.submitted_email || '—'}</td>
                   <td className="py-2 px-2 font-mono text-xs text-accent">{t.submitted_password || '—'}</td>

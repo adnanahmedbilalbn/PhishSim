@@ -59,6 +59,7 @@ router.post('/api/campaigns', async (req, res) => {
       open_time: null,
       click_time: null,
       submit_time: null,
+      preview_url: null,
     }));
 
     db.data.campaigns.push(campaign);
@@ -91,6 +92,7 @@ router.post('/api/campaigns/:id/launch', async (req, res) => {
       previewUrls.push({ email: target.email, preview_url: result.preview_url });
       target.sent = true;
       target.sent_time = now;
+      target.preview_url = result.preview_url || null;
     }
 
     campaign.status = 'active';

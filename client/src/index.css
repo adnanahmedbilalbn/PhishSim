@@ -28,6 +28,27 @@ body {
   .badge-completed {
     @apply bg-green-900/50 text-success text-xs px-2 py-1 rounded-full;
   }
+  .email-preview-link {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium
+           bg-slate-800/90 text-slate-300 border border-slate-700/80
+           hover:bg-slate-700 hover:text-white hover:border-slate-600
+           transition-colors duration-150 whitespace-nowrap;
+  }
+  .preview-table {
+    @apply w-full text-sm;
+  }
+  .preview-table thead tr {
+    @apply text-gray-500 border-b border-border bg-bg/40;
+  }
+  .preview-table th {
+    @apply text-left py-2.5 px-3 text-xs font-medium uppercase tracking-wide;
+  }
+  .preview-table tbody tr {
+    @apply border-b border-border/50 hover:bg-border/20 transition-colors;
+  }
+  .preview-table td {
+    @apply py-2.5 px-3;
+  }
 }
 
 ::-webkit-scrollbar {
