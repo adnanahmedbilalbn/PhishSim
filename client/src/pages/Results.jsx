@@ -36,18 +36,16 @@ function rowColor(target) {
   return '';
 }
 
-function submittedLabel(template) {
-  if (template === 'university') return 'Student ID Submitted';
-  if (template === 'corporate') return 'Username Submitted';
-  return 'Email Submitted';
-}
-
 function exportCsv(campaign, targets) {
-  const submittedCol = submittedLabel(campaign.template);
-  const headers = ['Recipient Email', submittedCol, 'Sent', 'Opened', 'Time to Open (s)', 'Clicked', 'Time to Click (s)', 'Submitted', 'Submit Time'];
+  const headers = [
+    'Recipient Email', 'Student ID', 'Email/Username Submitted', 'Password',
+    'Sent', 'Opened', 'Time to Open (s)', 'Clicked', 'Time to Click (s)', 'Submitted', 'Submit Time',
+  ];
   const rows = targets.map((t) => [
     t.email,
-    t.submitted_value ?? '',
+    t.submitted_student_id ?? '',
+    t.submitted_email ?? '',
+    t.submitted_password ?? '',
     t.sent ? 'Yes' : 'No',
     t.opened ? 'Yes' : 'No',
     t.time_to_open ?? '',
@@ -104,8 +102,6 @@ function SingleCampaignResults({ campaignId }) {
 
   const { campaign, targets, stats } = data;
   const psych = PSYCHOLOGY[campaign.template] || PSYCHOLOGY.gmail;
-  const submittedCol = submittedLabel(campaign.template);
-
   const statCards = [
     { label: 'Sent', value: stats.sent_count, pct: 100, color: 'text-gray-300' },
     { label: 'Opened', value: stats.opened_count, pct: stats.open_rate, color: 'text-blue-400' },
@@ -173,7 +169,9 @@ function SingleCampaignResults({ campaignId }) {
             <thead>
               <tr className="text-gray-500 border-b border-border">
                 <th className="text-left py-2 px-2">Recipient Email</th>
-                <th className="text-left py-2 px-2">{submittedCol}</th>
+                <th className="text-left py-2 px-2">Student ID</th>
+                <th className="text-left py-2 px-2">Email / Username</th>
+                <th className="text-left py-2 px-2">Password</th>
                 <th className="text-left py-2 px-2">Sent Time</th>
                 <th className="text-center py-2 px-2">Opened</th>
                 <th className="text-center py-2 px-2">Time-to-Open</th>
@@ -186,9 +184,9 @@ function SingleCampaignResults({ campaignId }) {
               {targets.map((t) => (
                 <tr key={t.id} className={`border-b border-border/50 ${rowColor(t)}`}>
                   <td className="py-2 px-2 font-mono text-xs">{t.email}</td>
-                  <td className="py-2 px-2 font-mono text-xs text-accent">
-                    {t.submitted_value || '—'}
-                  </td>
+                  <td className="py-2 px-2 font-mono text-xs text-warning">{t.submitted_student_id || '—'}</td>
+                  <td className="py-2 px-2 font-mono text-xs">{t.submitted_email || '—'}</td>
+                  <td className="py-2 px-2 font-mono text-xs text-accent">{t.submitted_password || '—'}</td>
                   <td className="py-2 px-2 text-xs text-gray-400">{formatTime(t.sent_time)}</td>
                   <td className="py-2 px-2 text-center">{t.opened ? '✓' : '—'}</td>
                   <td className="py-2 px-2 text-center font-mono text-xs">{formatSeconds(t.time_to_open)}</td>

